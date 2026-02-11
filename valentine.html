@@ -2,35 +2,30 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <title>For Raphaella</title>
     <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;600;700&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
 
         body {
             font-family: 'Outfit', sans-serif;
             background: #0a0208;
+            width: 100%;
+            height: 100%;
             min-height: 100vh;
-            min-height: 100dvh;
             display: flex;
             align-items: center;
             justify-content: center;
-            overflow: hidden;
-            -webkit-overflow-scrolling: touch;
-        }
-
-        /* Floating hearts background */
-        .floating-hearts {
             position: fixed;
             top: 0;
             left: 0;
-            width: 100%;
-            height: 100%;
+        }
+
+        .floating-hearts {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
             pointer-events: none;
             z-index: 1;
             overflow: hidden;
@@ -40,32 +35,12 @@
             position: absolute;
             bottom: -40px;
             font-size: 1.5rem;
-            opacity: 0;
-            -webkit-animation: floatUp linear forwards;
-            animation: floatUp linear forwards;
-            will-change: transform, opacity;
         }
 
-        @-webkit-keyframes floatUp {
-            0% { opacity: 0; -webkit-transform: translateY(0) rotate(0deg) scale(0.5); transform: translateY(0) rotate(0deg) scale(0.5); }
-            10% { opacity: 0.8; }
-            90% { opacity: 0.6; }
-            100% { opacity: 0; -webkit-transform: translateY(-110vh) rotate(360deg) scale(1); transform: translateY(-110vh) rotate(360deg) scale(1); }
-        }
-        @keyframes floatUp {
-            0% { opacity: 0; -webkit-transform: translateY(0) rotate(0deg) scale(0.5); transform: translateY(0) rotate(0deg) scale(0.5); }
-            10% { opacity: 0.8; }
-            90% { opacity: 0.6; }
-            100% { opacity: 0; -webkit-transform: translateY(-110vh) rotate(360deg) scale(1); transform: translateY(-110vh) rotate(360deg) scale(1); }
-        }
-
-        /* Ambient glow */
         .ambient {
             position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
             background:
                 radial-gradient(ellipse at 20% 50%, rgba(255, 50, 80, 0.08), transparent 60%),
                 radial-gradient(ellipse at 80% 50%, rgba(255, 100, 150, 0.06), transparent 60%),
@@ -74,102 +49,55 @@
             z-index: 0;
         }
 
-        /* Main popup card */
         .valentine-card {
             background: linear-gradient(145deg, #1a0a10, #2d0f1e, #1a0a10);
             border: 2px solid rgba(255, 50, 80, 0.4);
             border-radius: 24px;
-            padding: 55px 45px;
+            padding: 40px 25px;
             max-width: 520px;
             width: 90%;
             text-align: center;
             position: relative;
-            overflow: hidden;
             z-index: 10;
             box-shadow:
                 0 0 60px rgba(255, 50, 80, 0.3),
                 0 0 120px rgba(255, 50, 80, 0.1),
                 inset 0 0 60px rgba(255, 50, 80, 0.05);
-            -webkit-transform: scale(0.5);
-            transform: scale(0.5);
-            opacity: 0;
-            -webkit-animation: popIn 0.6s 0.4s ease forwards;
-            animation: popIn 0.6s 0.4s ease forwards;
-        }
-
-        @-webkit-keyframes popIn {
-            to { -webkit-transform: scale(1); transform: scale(1); opacity: 1; }
-        }
-        @keyframes popIn {
-            to { -webkit-transform: scale(1); transform: scale(1); opacity: 1; }
-        }
-
-        .valentine-card::before {
-            content: '';
-            position: absolute;
-            top: -50%;
-            left: -50%;
-            width: 200%;
-            height: 200%;
-            background:
-                radial-gradient(circle at 30% 40%, rgba(255, 50, 80, 0.08), transparent 50%),
-                radial-gradient(circle at 70% 60%, rgba(255, 100, 150, 0.06), transparent 50%);
-            pointer-events: none;
+            opacity: 1;
         }
 
         .heart-icon {
-            font-size: 4.5rem;
+            font-size: 4rem;
             display: block;
             margin-bottom: 12px;
-            -webkit-animation: heartbeat 1.2s ease-in-out infinite;
-            animation: heartbeat 1.2s ease-in-out infinite;
             filter: drop-shadow(0 0 25px rgba(255, 50, 80, 0.6));
-            position: relative;
-        }
-
-        @-webkit-keyframes heartbeat {
-            0%, 100% { -webkit-transform: scale(1); transform: scale(1); }
-            15% { -webkit-transform: scale(1.25); transform: scale(1.25); }
-            30% { -webkit-transform: scale(1); transform: scale(1); }
-            45% { -webkit-transform: scale(1.15); transform: scale(1.15); }
-            60% { -webkit-transform: scale(1); transform: scale(1); }
-        }
-        @keyframes heartbeat {
-            0%, 100% { -webkit-transform: scale(1); transform: scale(1); }
-            15% { -webkit-transform: scale(1.25); transform: scale(1.25); }
-            30% { -webkit-transform: scale(1); transform: scale(1); }
-            45% { -webkit-transform: scale(1.15); transform: scale(1.15); }
-            60% { -webkit-transform: scale(1); transform: scale(1); }
         }
 
         .for-her {
             font-family: 'Oswald', sans-serif;
-            font-size: 1.4rem;
+            font-size: 1.3rem;
             color: #ff6b8a;
             letter-spacing: 3px;
             text-transform: uppercase;
             display: block;
             margin-bottom: 8px;
             text-shadow: 0 0 20px rgba(255, 107, 138, 0.4);
-            position: relative;
         }
 
         .valentine-card h1 {
             font-family: 'Oswald', sans-serif;
-            font-size: 2.6rem;
+            font-size: 2.2rem;
             color: #ff3250;
             margin-bottom: 18px;
             letter-spacing: 2px;
             text-shadow: 0 0 30px rgba(255, 50, 80, 0.4);
-            position: relative;
         }
 
         .message {
-            font-size: 1.15rem;
+            font-size: 1.05rem;
             color: #f0c0cc;
             line-height: 1.9;
-            margin-bottom: 38px;
-            position: relative;
+            margin-bottom: 35px;
         }
 
         .message strong {
@@ -178,7 +106,7 @@
 
         .buttons {
             display: flex;
-            gap: 20px;
+            gap: 15px;
             justify-content: center;
             flex-wrap: wrap;
             position: relative;
@@ -186,7 +114,7 @@
         }
 
         .btn-yes {
-            padding: 16px 50px;
+            padding: 18px 50px;
             font-size: 1.15rem;
             font-weight: 700;
             font-family: 'Outfit', sans-serif;
@@ -197,34 +125,15 @@
             color: white;
             text-transform: uppercase;
             letter-spacing: 2px;
-            transition: all 0.3s ease;
             box-shadow: 0 8px 30px rgba(255, 50, 80, 0.4);
+            -webkit-tap-highlight-color: transparent;
+            touch-action: manipulation;
             position: relative;
-            overflow: hidden;
-        }
-
-        .btn-yes::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.25), transparent);
-            transition: left 0.5s;
-        }
-
-        .btn-yes:hover::before {
-            left: 100%;
-        }
-
-        .btn-yes:hover {
-            transform: translateY(-3px) scale(1.05);
-            box-shadow: 0 12px 40px rgba(255, 50, 80, 0.6);
+            z-index: 20;
         }
 
         .btn-no {
-            padding: 16px 40px;
+            padding: 18px 40px;
             font-size: 1rem;
             font-weight: 600;
             font-family: 'Outfit', sans-serif;
@@ -235,68 +144,31 @@
             color: rgba(255, 255, 255, 0.5);
             text-transform: uppercase;
             letter-spacing: 1px;
-            transition: all 0.15s ease;
+            -webkit-tap-highlight-color: transparent;
+            touch-action: manipulation;
             position: relative;
-        }
-
-        /* Celebration state */
-        .celebration {
-            -webkit-animation: celebrationPop 0.5s ease;
-            animation: celebrationPop 0.5s ease;
-        }
-
-        @-webkit-keyframes celebrationPop {
-            0% { -webkit-transform: scale(1); transform: scale(1); }
-            50% { -webkit-transform: scale(1.05); transform: scale(1.05); }
-            100% { -webkit-transform: scale(1); transform: scale(1); }
-        }
-        @keyframes celebrationPop {
-            0% { -webkit-transform: scale(1); transform: scale(1); }
-            50% { -webkit-transform: scale(1.05); transform: scale(1.05); }
-            100% { -webkit-transform: scale(1); transform: scale(1); }
+            z-index: 20;
         }
 
         .celebration-hearts-row {
-            font-size: 3.2rem;
+            font-size: 3rem;
             display: block;
             margin-bottom: 10px;
-            -webkit-animation: heartbeat 1s ease-in-out infinite;
-            animation: heartbeat 1s ease-in-out infinite;
         }
 
         .celebration-title {
             font-family: 'Oswald', sans-serif;
-            font-size: 2.8rem;
+            font-size: 2.4rem;
             color: #ff6b8a;
             text-shadow: 0 0 30px rgba(255, 50, 80, 0.5);
             margin-bottom: 10px;
         }
 
         .celebration-text {
-            font-size: 1.3rem;
+            font-size: 1.2rem;
             color: #ffb8c8;
             line-height: 2;
             margin-top: 20px;
-        }
-
-        /* Responsive */
-        @media (max-width: 768px) {
-            .valentine-card {
-                width: 92%;
-                padding: 35px 22px;
-            }
-
-            .valentine-card h1 {
-                font-size: 2rem;
-            }
-
-            .message {
-                font-size: 1rem;
-            }
-
-            .celebration-title {
-                font-size: 2.2rem;
-            }
         }
     </style>
 </head>
@@ -305,7 +177,7 @@
     <div class="floating-hearts" id="heartsContainer"></div>
 
     <div class="valentine-card" id="card">
-        <span class="heart-icon">&#10084;&#65039;</span>
+        <span class="heart-icon" id="heartIcon">&#10084;&#65039;</span>
         <span class="for-her">For Raphaella</span>
         <h1>HAPPY VALENTINE'S DAY</h1>
         <p class="message">
@@ -314,13 +186,22 @@
             <strong>Will you be my Valentine?</strong>
         </p>
         <div class="buttons" id="buttons">
-            <button class="btn-yes" id="btnYes" onclick="sayYes()">Yes!</button>
-            <button class="btn-no" id="btnNo" onmouseover="dodgeNo(event)" ontouchstart="dodgeNo(event)" onclick="dodgeNo(event)">No</button>
+            <button class="btn-yes" id="btnYes">Yes!</button>
+            <button class="btn-no" id="btnNo">No</button>
         </div>
     </div>
 
     <script>
-        // Spawn ambient floating hearts
+        // Heart beat animation via JS (works on all phones)
+        var heartIcon = document.getElementById('heartIcon');
+        var heartBig = false;
+        setInterval(function() {
+            heartBig = !heartBig;
+            heartIcon.style.transform = heartBig ? 'scale(1.25)' : 'scale(1)';
+            heartIcon.style.transition = 'transform 0.3s ease';
+        }, 600);
+
+        // Floating hearts via JS (no CSS animation dependency)
         function spawnHearts(count, fast) {
             var container = document.getElementById('heartsContainer');
             var emojis = ['\u2764\uFE0F', '\uD83D\uDC95', '\uD83D\uDC96', '\uD83D\uDC97', '\uD83D\uDC9E', '\uD83D\uDC9D'];
@@ -332,53 +213,94 @@
                         el.textContent = emojis[Math.floor(Math.random() * emojis.length)];
                         el.style.left = Math.random() * 100 + '%';
                         el.style.fontSize = (Math.random() * 1.5 + 0.8) + 'rem';
-                        var dur = (fast ? Math.random() * 3 + 3 : Math.random() * 4 + 5) + 's';
-                        el.style.webkitAnimationDuration = dur;
-                        el.style.animationDuration = dur;
+                        el.style.opacity = '0';
+                        el.style.transition = 'none';
                         container.appendChild(el);
-                        el.addEventListener('animationend', function() { el.remove(); });
-                        el.addEventListener('webkitAnimationEnd', function() { el.remove(); });
+
+                        var duration = fast ? (Math.random() * 3 + 3) : (Math.random() * 4 + 5);
+                        var start = Date.now();
+                        var startBottom = -40;
+                        var endBottom = window.innerHeight + 50;
+
+                        function animate() {
+                            var elapsed = (Date.now() - start) / 1000;
+                            var progress = elapsed / duration;
+                            if (progress >= 1) {
+                                el.remove();
+                                return;
+                            }
+                            var y = startBottom + (endBottom - startBottom) * progress;
+                            el.style.bottom = y + 'px';
+                            el.style.transform = 'rotate(' + (progress * 360) + 'deg) scale(' + (0.5 + progress * 0.5) + ')';
+
+                            if (progress < 0.1) {
+                                el.style.opacity = String(progress / 0.1 * 0.8);
+                            } else if (progress > 0.9) {
+                                el.style.opacity = String((1 - progress) / 0.1 * 0.6);
+                            } else {
+                                el.style.opacity = '0.7';
+                            }
+                            requestAnimationFrame(animate);
+                        }
+                        requestAnimationFrame(animate);
                     }, idx * (fast ? 80 : 300));
                 })(i);
             }
         }
 
-        // "No" button dodges away on touch & mouse
+        // "No" button dodges away
+        var noBtn = document.getElementById('btnNo');
+        var yesBtn = document.getElementById('btnYes');
+        var yesScale = 1;
+
         function dodgeNo(e) {
-            if (e && e.preventDefault) e.preventDefault();
-            var btn = document.getElementById('btnNo');
+            e.preventDefault();
+            e.stopPropagation();
             var card = document.getElementById('card');
             var rect = card.getBoundingClientRect();
-            var maxX = rect.width - btn.offsetWidth - 40;
-            var maxY = rect.height - btn.offsetHeight - 20;
-            btn.style.position = 'relative';
-            btn.style.left = (Math.random() * maxX - maxX / 2) + 'px';
-            btn.style.top = (Math.random() * maxY - maxY / 2) + 'px';
-            btn.style.webkitTransition = 'all 0.15s ease';
-            btn.style.transition = 'all 0.15s ease';
+            var maxX = rect.width - noBtn.offsetWidth - 40;
+            var maxY = 100;
+            noBtn.style.left = (Math.random() * maxX - maxX / 2) + 'px';
+            noBtn.style.top = (Math.random() * maxY - maxY / 2) + 'px';
+            noBtn.style.transition = 'left 0.15s ease, top 0.15s ease';
 
-            // Grow the Yes button
-            var yes = document.getElementById('btnYes');
-            var scale = Math.min(parseFloat(yes.dataset.s || '1') + 0.08, 1.5);
-            yes.dataset.s = scale;
-            yes.style.webkitTransform = 'scale(' + scale + ')';
-            yes.style.transform = 'scale(' + scale + ')';
+            yesScale = Math.min(yesScale + 0.08, 1.5);
+            yesBtn.style.transform = 'scale(' + yesScale + ')';
+            yesBtn.style.transition = 'transform 0.2s ease';
         }
 
-        // She said yes!
+        noBtn.addEventListener('touchstart', dodgeNo, {passive: false});
+        noBtn.addEventListener('mouseover', dodgeNo);
+        noBtn.addEventListener('click', dodgeNo);
+
+        // "Yes" button
         function sayYes() {
             var card = document.getElementById('card');
-            card.classList.add('celebration');
             card.innerHTML =
-                '<span class="celebration-hearts-row">\u2764\uFE0F\uD83D\uDD25\u2764\uFE0F</span>' +
+                '<span class="celebration-hearts-row" id="celebHearts">\u2764\uFE0F\uD83D\uDD25\u2764\uFE0F</span>' +
                 '<h1 class="celebration-title">RAPHAELLA SAID YES!</h1>' +
                 '<p class="celebration-text">' +
                     'Happy Valentine\'s Day, Raphaella!<br>' +
                     'You just made me the happiest person alive.' +
                 '</p>';
 
+            // Animate celebration hearts
+            var celebHearts = document.getElementById('celebHearts');
+            var celebBig = false;
+            setInterval(function() {
+                celebBig = !celebBig;
+                celebHearts.style.transform = celebBig ? 'scale(1.2)' : 'scale(1)';
+                celebHearts.style.transition = 'transform 0.4s ease';
+            }, 500);
+
             spawnHearts(60, true);
         }
+
+        yesBtn.addEventListener('click', sayYes);
+        yesBtn.addEventListener('touchend', function(e) {
+            e.preventDefault();
+            sayYes();
+        });
 
         // Start background hearts
         spawnHearts(25, false);
