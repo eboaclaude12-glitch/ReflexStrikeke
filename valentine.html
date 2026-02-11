@@ -16,10 +16,12 @@
             font-family: 'Outfit', sans-serif;
             background: #0a0208;
             min-height: 100vh;
+            min-height: 100dvh;
             display: flex;
             align-items: center;
             justify-content: center;
             overflow: hidden;
+            -webkit-overflow-scrolling: touch;
         }
 
         /* Floating hearts background */
@@ -39,24 +41,22 @@
             bottom: -40px;
             font-size: 1.5rem;
             opacity: 0;
+            -webkit-animation: floatUp linear forwards;
             animation: floatUp linear forwards;
+            will-change: transform, opacity;
         }
 
+        @-webkit-keyframes floatUp {
+            0% { opacity: 0; -webkit-transform: translateY(0) rotate(0deg) scale(0.5); transform: translateY(0) rotate(0deg) scale(0.5); }
+            10% { opacity: 0.8; }
+            90% { opacity: 0.6; }
+            100% { opacity: 0; -webkit-transform: translateY(-110vh) rotate(360deg) scale(1); transform: translateY(-110vh) rotate(360deg) scale(1); }
+        }
         @keyframes floatUp {
-            0% {
-                opacity: 0;
-                transform: translateY(0) rotate(0deg) scale(0.5);
-            }
-            10% {
-                opacity: 0.8;
-            }
-            90% {
-                opacity: 0.6;
-            }
-            100% {
-                opacity: 0;
-                transform: translateY(-110vh) rotate(360deg) scale(1);
-            }
+            0% { opacity: 0; -webkit-transform: translateY(0) rotate(0deg) scale(0.5); transform: translateY(0) rotate(0deg) scale(0.5); }
+            10% { opacity: 0.8; }
+            90% { opacity: 0.6; }
+            100% { opacity: 0; -webkit-transform: translateY(-110vh) rotate(360deg) scale(1); transform: translateY(-110vh) rotate(360deg) scale(1); }
         }
 
         /* Ambient glow */
@@ -90,16 +90,18 @@
                 0 0 60px rgba(255, 50, 80, 0.3),
                 0 0 120px rgba(255, 50, 80, 0.1),
                 inset 0 0 60px rgba(255, 50, 80, 0.05);
+            -webkit-transform: scale(0.5);
             transform: scale(0.5);
             opacity: 0;
+            -webkit-animation: popIn 0.6s 0.4s ease forwards;
             animation: popIn 0.6s 0.4s ease forwards;
         }
 
+        @-webkit-keyframes popIn {
+            to { -webkit-transform: scale(1); transform: scale(1); opacity: 1; }
+        }
         @keyframes popIn {
-            to {
-                transform: scale(1);
-                opacity: 1;
-            }
+            to { -webkit-transform: scale(1); transform: scale(1); opacity: 1; }
         }
 
         .valentine-card::before {
@@ -119,17 +121,25 @@
             font-size: 4.5rem;
             display: block;
             margin-bottom: 12px;
+            -webkit-animation: heartbeat 1.2s ease-in-out infinite;
             animation: heartbeat 1.2s ease-in-out infinite;
             filter: drop-shadow(0 0 25px rgba(255, 50, 80, 0.6));
             position: relative;
         }
 
+        @-webkit-keyframes heartbeat {
+            0%, 100% { -webkit-transform: scale(1); transform: scale(1); }
+            15% { -webkit-transform: scale(1.25); transform: scale(1.25); }
+            30% { -webkit-transform: scale(1); transform: scale(1); }
+            45% { -webkit-transform: scale(1.15); transform: scale(1.15); }
+            60% { -webkit-transform: scale(1); transform: scale(1); }
+        }
         @keyframes heartbeat {
-            0%, 100% { transform: scale(1); }
-            15% { transform: scale(1.25); }
-            30% { transform: scale(1); }
-            45% { transform: scale(1.15); }
-            60% { transform: scale(1); }
+            0%, 100% { -webkit-transform: scale(1); transform: scale(1); }
+            15% { -webkit-transform: scale(1.25); transform: scale(1.25); }
+            30% { -webkit-transform: scale(1); transform: scale(1); }
+            45% { -webkit-transform: scale(1.15); transform: scale(1.15); }
+            60% { -webkit-transform: scale(1); transform: scale(1); }
         }
 
         .for-her {
@@ -231,19 +241,26 @@
 
         /* Celebration state */
         .celebration {
+            -webkit-animation: celebrationPop 0.5s ease;
             animation: celebrationPop 0.5s ease;
         }
 
+        @-webkit-keyframes celebrationPop {
+            0% { -webkit-transform: scale(1); transform: scale(1); }
+            50% { -webkit-transform: scale(1.05); transform: scale(1.05); }
+            100% { -webkit-transform: scale(1); transform: scale(1); }
+        }
         @keyframes celebrationPop {
-            0% { transform: scale(1); }
-            50% { transform: scale(1.05); }
-            100% { transform: scale(1); }
+            0% { -webkit-transform: scale(1); transform: scale(1); }
+            50% { -webkit-transform: scale(1.05); transform: scale(1.05); }
+            100% { -webkit-transform: scale(1); transform: scale(1); }
         }
 
         .celebration-hearts-row {
             font-size: 3.2rem;
             display: block;
             margin-bottom: 10px;
+            -webkit-animation: heartbeat 1s ease-in-out infinite;
             animation: heartbeat 1s ease-in-out infinite;
         }
 
@@ -298,51 +315,59 @@
         </p>
         <div class="buttons" id="buttons">
             <button class="btn-yes" id="btnYes" onclick="sayYes()">Yes!</button>
-            <button class="btn-no" id="btnNo" onmouseover="dodgeNo()" onclick="dodgeNo()">No</button>
+            <button class="btn-no" id="btnNo" onmouseover="dodgeNo(event)" ontouchstart="dodgeNo(event)" onclick="dodgeNo(event)">No</button>
         </div>
     </div>
 
     <script>
         // Spawn ambient floating hearts
         function spawnHearts(count, fast) {
-            const container = document.getElementById('heartsContainer');
-            const emojis = ['\u2764\uFE0F', '\uD83D\uDC95', '\uD83D\uDC96', '\uD83D\uDC97', '\uD83D\uDC9E', '\uD83D\uDC9D'];
-            for (let i = 0; i < count; i++) {
-                setTimeout(() => {
-                    const el = document.createElement('span');
-                    el.className = 'floating-heart';
-                    el.textContent = emojis[Math.floor(Math.random() * emojis.length)];
-                    el.style.left = Math.random() * 100 + '%';
-                    el.style.fontSize = (Math.random() * 1.5 + 0.8) + 'rem';
-                    el.style.animationDuration = (fast ? Math.random() * 3 + 3 : Math.random() * 4 + 5) + 's';
-                    container.appendChild(el);
-                    el.addEventListener('animationend', () => el.remove());
-                }, i * (fast ? 80 : 300));
+            var container = document.getElementById('heartsContainer');
+            var emojis = ['\u2764\uFE0F', '\uD83D\uDC95', '\uD83D\uDC96', '\uD83D\uDC97', '\uD83D\uDC9E', '\uD83D\uDC9D'];
+            for (var i = 0; i < count; i++) {
+                (function(idx) {
+                    setTimeout(function() {
+                        var el = document.createElement('span');
+                        el.className = 'floating-heart';
+                        el.textContent = emojis[Math.floor(Math.random() * emojis.length)];
+                        el.style.left = Math.random() * 100 + '%';
+                        el.style.fontSize = (Math.random() * 1.5 + 0.8) + 'rem';
+                        var dur = (fast ? Math.random() * 3 + 3 : Math.random() * 4 + 5) + 's';
+                        el.style.webkitAnimationDuration = dur;
+                        el.style.animationDuration = dur;
+                        container.appendChild(el);
+                        el.addEventListener('animationend', function() { el.remove(); });
+                        el.addEventListener('webkitAnimationEnd', function() { el.remove(); });
+                    }, idx * (fast ? 80 : 300));
+                })(i);
             }
         }
 
-        // "No" button dodges away
-        function dodgeNo() {
-            const btn = document.getElementById('btnNo');
-            const card = document.getElementById('card');
-            const rect = card.getBoundingClientRect();
-            const maxX = rect.width - btn.offsetWidth - 40;
-            const maxY = rect.height - btn.offsetHeight - 20;
+        // "No" button dodges away on touch & mouse
+        function dodgeNo(e) {
+            if (e && e.preventDefault) e.preventDefault();
+            var btn = document.getElementById('btnNo');
+            var card = document.getElementById('card');
+            var rect = card.getBoundingClientRect();
+            var maxX = rect.width - btn.offsetWidth - 40;
+            var maxY = rect.height - btn.offsetHeight - 20;
             btn.style.position = 'relative';
             btn.style.left = (Math.random() * maxX - maxX / 2) + 'px';
             btn.style.top = (Math.random() * maxY - maxY / 2) + 'px';
+            btn.style.webkitTransition = 'all 0.15s ease';
             btn.style.transition = 'all 0.15s ease';
 
             // Grow the Yes button
-            const yes = document.getElementById('btnYes');
-            const scale = Math.min(parseFloat(yes.dataset.s || '1') + 0.08, 1.5);
+            var yes = document.getElementById('btnYes');
+            var scale = Math.min(parseFloat(yes.dataset.s || '1') + 0.08, 1.5);
             yes.dataset.s = scale;
+            yes.style.webkitTransform = 'scale(' + scale + ')';
             yes.style.transform = 'scale(' + scale + ')';
         }
 
         // She said yes!
         function sayYes() {
-            const card = document.getElementById('card');
+            var card = document.getElementById('card');
             card.classList.add('celebration');
             card.innerHTML =
                 '<span class="celebration-hearts-row">\u2764\uFE0F\uD83D\uDD25\u2764\uFE0F</span>' +
