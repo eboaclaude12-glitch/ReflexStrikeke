@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>For Raphaella</title>
+    <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;600;700&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Outfit', sans-serif;
+            background: #0a0208;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+        }
+
+        /* Floating hearts background */
+        .floating-hearts {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
+            overflow: hidden;
+        }
+
+        .floating-heart {
+            position: absolute;
+            bottom: -40px;
+            font-size: 1.5rem;
+            opacity: 0;
+            animation: floatUp linear forwards;
+        }
+
+        @keyframes floatUp {
+            0% {
+                opacity: 0;
+                transform: translateY(0) rotate(0deg) scale(0.5);
+            }
+            10% {
+                opacity: 0.8;
+            }
+            90% {
+                opacity: 0.6;
+            }
+            100% {
+                opacity: 0;
+                transform: translateY(-110vh) rotate(360deg) scale(1);
+            }
+        }
+
+        /* Ambient glow */
+        .ambient {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background:
+                radial-gradient(ellipse at 20% 50%, rgba(255, 50, 80, 0.08), transparent 60%),
+                radial-gradient(ellipse at 80% 50%, rgba(255, 100, 150, 0.06), transparent 60%),
+                radial-gradient(ellipse at 50% 100%, rgba(200, 50, 80, 0.1), transparent 50%);
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        /* Main popup card */
+        .valentine-card {
+            background: linear-gradient(145deg, #1a0a10, #2d0f1e, #1a0a10);
+            border: 2px solid rgba(255, 50, 80, 0.4);
+            border-radius: 24px;
+            padding: 55px 45px;
+            max-width: 520px;
+            width: 90%;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+            z-index: 10;
+            box-shadow:
+                0 0 60px rgba(255, 50, 80, 0.3),
+                0 0 120px rgba(255, 50, 80, 0.1),
+                inset 0 0 60px rgba(255, 50, 80, 0.05);
+            transform: scale(0.5);
+            opacity: 0;
+            animation: popIn 0.6s 0.4s ease forwards;
+        }
+
+        @keyframes popIn {
+            to {
+                transform: scale(1);
+                opacity: 1;
+            }
+        }
+
+        .valentine-card::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background:
+                radial-gradient(circle at 30% 40%, rgba(255, 50, 80, 0.08), transparent 50%),
+                radial-gradient(circle at 70% 60%, rgba(255, 100, 150, 0.06), transparent 50%);
+            pointer-events: none;
+        }
+
+        .heart-icon {
+            font-size: 4.5rem;
+            display: block;
+            margin-bottom: 12px;
+            animation: heartbeat 1.2s ease-in-out infinite;
+            filter: drop-shadow(0 0 25px rgba(255, 50, 80, 0.6));
+            position: relative;
+        }
+
+        @keyframes heartbeat {
+            0%, 100% { transform: scale(1); }
+            15% { transform: scale(1.25); }
+            30% { transform: scale(1); }
+            45% { transform: scale(1.15); }
+            60% { transform: scale(1); }
+        }
+
+        .for-her {
+            font-family: 'Oswald', sans-serif;
+            font-size: 1.4rem;
+            color: #ff6b8a;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            display: block;
+            margin-bottom: 8px;
+            text-shadow: 0 0 20px rgba(255, 107, 138, 0.4);
+            position: relative;
+        }
+
+        .valentine-card h1 {
+            font-family: 'Oswald', sans-serif;
+            font-size: 2.6rem;
+            color: #ff3250;
+            margin-bottom: 18px;
+            letter-spacing: 2px;
+            text-shadow: 0 0 30px rgba(255, 50, 80, 0.4);
+            position: relative;
+        }
+
+        .message {
+            font-size: 1.15rem;
+            color: #f0c0cc;
+            line-height: 1.9;
+            margin-bottom: 38px;
+            position: relative;
+        }
+
+        .message strong {
+            color: #ff6b8a;
+        }
+
+        .buttons {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            flex-wrap: wrap;
+            position: relative;
+            min-height: 60px;
+        }
+
+        .btn-yes {
+            padding: 16px 50px;
+            font-size: 1.15rem;
+            font-weight: 700;
+            font-family: 'Outfit', sans-serif;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            background: linear-gradient(135deg, #ff3250, #ff6b8a);
+            color: white;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            transition: all 0.3s ease;
+            box-shadow: 0 8px 30px rgba(255, 50, 80, 0.4);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn-yes::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.25), transparent);
+            transition: left 0.5s;
+        }
+
+        .btn-yes:hover::before {
+            left: 100%;
+        }
+
+        .btn-yes:hover {
+            transform: translateY(-3px) scale(1.05);
+            box-shadow: 0 12px 40px rgba(255, 50, 80, 0.6);
+        }
+
+        .btn-no {
+            padding: 16px 40px;
+            font-size: 1rem;
+            font-weight: 600;
+            font-family: 'Outfit', sans-serif;
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            border-radius: 50px;
+            cursor: pointer;
+            background: transparent;
+            color: rgba(255, 255, 255, 0.5);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            transition: all 0.15s ease;
+            position: relative;
+        }
+
+        /* Celebration state */
+        .celebration {
+            animation: celebrationPop 0.5s ease;
+        }
+
+        @keyframes celebrationPop {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+
+        .celebration-hearts-row {
+            font-size: 3.2rem;
+            display: block;
+            margin-bottom: 10px;
+            animation: heartbeat 1s ease-in-out infinite;
+        }
+
+        .celebration-title {
+            font-family: 'Oswald', sans-serif;
+            font-size: 2.8rem;
+            color: #ff6b8a;
+            text-shadow: 0 0 30px rgba(255, 50, 80, 0.5);
+            margin-bottom: 10px;
+        }
+
+        .celebration-text {
+            font-size: 1.3rem;
+            color: #ffb8c8;
+            line-height: 2;
+            margin-top: 20px;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .valentine-card {
+                width: 92%;
+                padding: 35px 22px;
+            }
+
+            .valentine-card h1 {
+                font-size: 2rem;
+            }
+
+            .message {
+                font-size: 1rem;
+            }
+
+            .celebration-title {
+                font-size: 2.2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="ambient"></div>
+    <div class="floating-hearts" id="heartsContainer"></div>
+
+    <div class="valentine-card" id="card">
+        <span class="heart-icon">&#10084;&#65039;</span>
+        <span class="for-her">For Raphaella</span>
+        <h1>HAPPY VALENTINE'S DAY</h1>
+        <p class="message">
+            Raphaella, you make every day feel like a knockout.<br>
+            You're the champion of my heart &mdash;<br>
+            <strong>Will you be my Valentine?</strong>
+        </p>
+        <div class="buttons" id="buttons">
+            <button class="btn-yes" id="btnYes" onclick="sayYes()">Yes!</button>
+            <button class="btn-no" id="btnNo" onmouseover="dodgeNo()" onclick="dodgeNo()">No</button>
+        </div>
+    </div>
+
+    <script>
+        // Spawn ambient floating hearts
+        function spawnHearts(count, fast) {
+            const container = document.getElementById('heartsContainer');
+            const emojis = ['\u2764\uFE0F', '\uD83D\uDC95', '\uD83D\uDC96', '\uD83D\uDC97', '\uD83D\uDC9E', '\uD83D\uDC9D'];
+            for (let i = 0; i < count; i++) {
+                setTimeout(() => {
+                    const el = document.createElement('span');
+                    el.className = 'floating-heart';
+                    el.textContent = emojis[Math.floor(Math.random() * emojis.length)];
+                    el.style.left = Math.random() * 100 + '%';
+                    el.style.fontSize = (Math.random() * 1.5 + 0.8) + 'rem';
+                    el.style.animationDuration = (fast ? Math.random() * 3 + 3 : Math.random() * 4 + 5) + 's';
+                    container.appendChild(el);
+                    el.addEventListener('animationend', () => el.remove());
+                }, i * (fast ? 80 : 300));
+            }
+        }
+
+        // "No" button dodges away
+        function dodgeNo() {
+            const btn = document.getElementById('btnNo');
+            const card = document.getElementById('card');
+            const rect = card.getBoundingClientRect();
+            const maxX = rect.width - btn.offsetWidth - 40;
+            const maxY = rect.height - btn.offsetHeight - 20;
+            btn.style.position = 'relative';
+            btn.style.left = (Math.random() * maxX - maxX / 2) + 'px';
+            btn.style.top = (Math.random() * maxY - maxY / 2) + 'px';
+            btn.style.transition = 'all 0.15s ease';
+
+            // Grow the Yes button
+            const yes = document.getElementById('btnYes');
+            const scale = Math.min(parseFloat(yes.dataset.s || '1') + 0.08, 1.5);
+            yes.dataset.s = scale;
+            yes.style.transform = 'scale(' + scale + ')';
+        }
+
+        // She said yes!
+        function sayYes() {
+            const card = document.getElementById('card');
+            card.classList.add('celebration');
+            card.innerHTML =
+                '<span class="celebration-hearts-row">\u2764\uFE0F\uD83D\uDD25\u2764\uFE0F</span>' +
+                '<h1 class="celebration-title">RAPHAELLA SAID YES!</h1>' +
+                '<p class="celebration-text">' +
+                    'Happy Valentine\'s Day, Raphaella!<br>' +
+                    'You just made me the happiest person alive.' +
+                '</p>';
+
+            spawnHearts(60, true);
+        }
+
+        // Start background hearts
+        spawnHearts(25, false);
+    </script>
+</body>
+</html>
