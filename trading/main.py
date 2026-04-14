@@ -22,6 +22,7 @@ import logging
 from datetime import datetime, timezone
 
 import config
+from notifier import Notifier
 from mt5_connector import (
     connect, disconnect,
     get_account_info, get_symbol_info,
@@ -55,13 +56,16 @@ def _has_position_in_direction(positions: list, order_type: str) -> bool:
     return any(p["type"] == key for p in positions)
 
 
-async def _close_opposite_positions(connection, positions: list, signal: int) -> None:
+async def _close_opposite_positions(connection, notifier: Notifier,
+                                     positions: list, signal: int) -> None:
     """Close any positions in the direction opposite to the new signal."""
     opposite = "POSITION_TYPE_SELL" if signal == 1 else "POSITION_TYPE_BUY"
     for pos in positions:
         if pos["type"] == opposite:
-            logger.info(f"Closing opposite {opposite.replace('POSITION_TYPE_', '')} #{pos['id']}")
+            direction = opposite.replace("POSITION_TYPE_", "")
+            logger.info(f"Closing opposite {direction} #{pos['id']}")
             await close_position(connection, pos)
+            await notifier.trade_closed(direction, pos["symbol"])
 
 
 # ── Core loop ─────────────────────────────────────────────────────────────────
@@ -98,8 +102,18 @@ async def run() -> None:
         max_drawdown_pct=config.FTMO_MAX_DRAWDOWN,
     )
 
+    notifier = Notifier(
+        token=config.TELEGRAM_TOKEN,
+        chat_id=config.TELEGRAM_CHAT_ID,
+        enabled=config.TELEGRAM_ENABLED,
+    )
+    await notifier.bot_started(
+        config.SYMBOL, config.TIMEFRAME, initial_balance, account["currency"]
+    )
+
     last_bar_time = None
     last_day      = None
+    ftmo_halted   = False   # track so we only notify once per halt
 
     try:
         while True:
@@ -144,8 +158,12 @@ async def run() -> None:
             allowed, reason = ftmo_guard.is_trading_allowed(current_balance)
             if not allowed:
                 logger.warning(f"Trading halted — {reason}")
+                if not ftmo_halted:
+                    await notifier.ftmo_halt(reason)
+                    ftmo_halted = True
                 await asyncio.sleep(config.SLEEP_SECONDS)
                 continue
+            ftmo_halted = False   # reset if trading is allowed again
 
             # --- Generate signal ---
             try:
@@ -206,7 +224,7 @@ async def run() -> None:
                 await asyncio.sleep(config.SLEEP_SECONDS)
                 continue
 
-            await _close_opposite_positions(connection, open_positions, signal)
+            await _close_opposite_positions(connection, notifier, open_positions, signal)
 
             # Refresh after any closes
             open_positions = await get_open_positions(
@@ -276,15 +294,28 @@ async def run() -> None:
                     comment=config.TRADE_COMMENT,
                     digits=symbol_info["digits"],
                 )
+                await notifier.trade_opened(
+                    direction=desired_type,
+                    symbol=config.SYMBOL,
+                    entry=entry,
+                    sl=sl,
+                    tp=tp,
+                    lot=lot,
+                    risk_pct=config.RISK_PERCENT,
+                    details=details,
+                )
             except Exception as e:
                 logger.error(f"Order failed: {e}")
+                await notifier.error(f"Order failed: {e}")
 
             await asyncio.sleep(config.SLEEP_SECONDS)
 
     except KeyboardInterrupt:
         logger.info("Bot stopped by user (Ctrl+C).")
+        await notifier.bot_stopped()
     except Exception as e:
         logger.exception(f"Unexpected error: {e}")
+        await notifier.error(f"Bot crashed: {e}")
     finally:
         await disconnect(api)
         logger.info("ReflexStrike Bot shut down.")

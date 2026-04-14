@@ -65,5 +65,11 @@ FVG_PROXIMITY_ATR   = 0.5   # price within this many ATRs of FVG counts as "near
 # MIN_CONFLUENCE_SCORE = 2  → two extra factors (very selective)
 MIN_CONFLUENCE_SCORE = 1
 
+# --- Telegram Notifications ---
+# Follow the 5-step setup in trading/notifier.py to get these values
+TELEGRAM_ENABLED = True
+TELEGRAM_TOKEN   = "YOUR_BOT_TOKEN_HERE"    # from @BotFather
+TELEGRAM_CHAT_ID = "YOUR_CHAT_ID_HERE"      # your Telegram user ID
+
 # --- Loop Settings ---
 SLEEP_SECONDS = 10               # Polling interval in seconds
