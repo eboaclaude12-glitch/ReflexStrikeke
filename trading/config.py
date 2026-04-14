@@ -69,7 +69,7 @@ MIN_CONFLUENCE_SCORE = 1
 # Follow the 5-step setup in trading/notifier.py to get these values
 TELEGRAM_ENABLED = True
 TELEGRAM_TOKEN   = "8680399394:AAFYVTHxIGa30vo-3TIznXk8_Dkh5LGFwnI"
-TELEGRAM_CHAT_ID = "YOUR_CHAT_ID_HERE"      # still needed — see steps below
+TELEGRAM_CHAT_ID = "1039051272"
 
 # --- Loop Settings ---
 SLEEP_SECONDS = 10               # Polling interval in seconds
