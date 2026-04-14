@@ -145,13 +145,33 @@ async def get_symbol_info(connection, symbol: str) -> dict:
     Keys: digits, volume_min, volume_max, volume_step, tick_size, tick_value
     """
     spec = await connection.get_symbol_specification(symbol)
+    logger.debug(f"Symbol spec keys: {list(spec.keys())}")
+
+    # Field names vary across brokers/MetaAPI versions — try both forms.
+    volume_min  = spec.get("minVolume")  or spec.get("volumeMin",  0.01)
+    volume_max  = spec.get("maxVolume")  or spec.get("volumeMax",  500.0)
+    volume_step = spec.get("volumeStep", 0.01)
+    tick_size   = spec.get("tickSize",   0.01)
+    digits      = spec.get("digits",     2)
+
+    # tickValue is not always provided by the broker.
+    # Fall back to contractSize × tickSize (correct for XAUUSD/USD accounts).
+    tick_value = spec.get("tickValue")
+    if not tick_value:
+        contract_size = spec.get("contractSize", 100)
+        tick_value = tick_size * contract_size
+        logger.info(
+            f"tickValue absent in spec — computed: "
+            f"{tick_size} × {contract_size} = {tick_value}"
+        )
+
     return {
-        "digits":      spec["digits"],
-        "volume_min":  spec["minVolume"],
-        "volume_max":  spec["maxVolume"],
-        "volume_step": spec["volumeStep"],
-        "tick_size":   spec["tickSize"],
-        "tick_value":  spec["tickValue"],
+        "digits":      digits,
+        "volume_min":  volume_min,
+        "volume_max":  volume_max,
+        "volume_step": volume_step,
+        "tick_size":   tick_size,
+        "tick_value":  tick_value,
     }
 
 
