@@ -1,7 +1,7 @@
 # ReflexStrike Trading Bot — Python dependencies
 # Install with: pip install -r requirements.txt
-# NOTE: MetaTrader5 requires Windows + MT5 terminal installed
+# Works on macOS, Linux, and Windows (Python 3.11+)
 
-MetaTrader5>=5.0.45
+metaapi-cloud-sdk>=27.0.0
 pandas>=2.0.0
 numpy>=1.24.0

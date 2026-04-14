@@ -8,6 +8,13 @@
 # Broker:   FTMO on MetaTrader 5
 # ─────────────────────────────────────────────
 
+# --- MetaAPI Credentials ---
+# 1. Sign up free at https://app.metaapi.cloud
+# 2. Add your FTMO MT5 account under "MetaTrader Accounts"
+# 3. Copy your API token and Account ID here
+METAAPI_TOKEN      = "YOUR_METAAPI_TOKEN_HERE"
+METAAPI_ACCOUNT_ID = "YOUR_ACCOUNT_ID_HERE"
+
 # --- Instrument ---
 SYMBOL = "XAUUSD"
 TIMEFRAME = "H1"          # M1, M5, M15, M30, H1, H4, D1
