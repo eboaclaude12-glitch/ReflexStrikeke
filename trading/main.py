@@ -2,6 +2,7 @@
 ReflexStrike Trading Bot — Main Entry Point
 ────────────────────────────────────────────
 Strategy : EMA 20/50 Crossover + RSI 14 Filter
+          + Supply & Demand Zones + FVG + Price Action
 Instrument: XAUUSD (Gold) on H1
 Broker    : FTMO via MetaTrader 5
 
@@ -75,8 +76,8 @@ def run() -> None:
     logger.info("  ReflexStrike Bot — Starting up")
     logger.info(f"  Symbol    : {config.SYMBOL}")
     logger.info(f"  Timeframe : {config.TIMEFRAME}")
-    logger.info(f"  Strategy  : EMA {config.FAST_EMA}/{config.SLOW_EMA} + RSI {config.RSI_PERIOD}")
-    logger.info(f"  Risk      : {config.RISK_PERCENT}% per trade")
+    logger.info(f"  Strategy  : EMA {config.FAST_EMA}/{config.SLOW_EMA} + RSI {config.RSI_PERIOD} + S/D + FVG + PA")
+    logger.info(f"  Risk      : {config.RISK_PERCENT}% per trade  |  Min confluence: {config.MIN_CONFLUENCE_SCORE}/3")
     logger.info("=" * 60)
 
     # --- Connect ---
@@ -146,7 +147,7 @@ def run() -> None:
 
             # --- Generate signal ---
             try:
-                signal, atr_value, indicators = generate_signal(
+                signal, atr_value, details = generate_signal(
                     df,
                     fast=config.FAST_EMA,
                     slow=config.SLOW_EMA,
@@ -154,17 +155,42 @@ def run() -> None:
                     atr_period=config.ATR_PERIOD,
                     rsi_overbought=config.RSI_OVERBOUGHT,
                     rsi_oversold=config.RSI_OVERSOLD,
+                    # Supply & Demand
+                    swing_window=config.ZONE_SWING_WINDOW,
+                    zone_atr_width=config.ZONE_ATR_WIDTH,
+                    min_impulse_atr=config.ZONE_MIN_IMPULSE,
+                    max_zones=config.ZONE_MAX_ZONES,
+                    # FVG
+                    fvg_lookback=config.FVG_LOOKBACK,
+                    fvg_min_gap_atr=config.FVG_MIN_GAP_ATR,
+                    fvg_proximity_atr=config.FVG_PROXIMITY_ATR,
+                    # Confluence gate
+                    min_confluence=config.MIN_CONFLUENCE_SCORE,
                 )
             except ValueError as e:
                 logger.warning(f"Signal generation skipped: {e}")
                 time.sleep(config.SLEEP_SECONDS)
                 continue
 
+            # Core indicators line
             logger.info(
-                f"Indicators | EMA{config.FAST_EMA}={indicators['ema_fast']:.2f}  "
-                f"EMA{config.SLOW_EMA}={indicators['ema_slow']:.2f}  "
-                f"RSI={indicators['rsi']:.1f}  ATR={indicators['atr']:.2f}  "
-                f"Signal={'BUY' if signal==1 else 'SELL' if signal==-1 else 'NONE'}"
+                f"Indicators | EMA{config.FAST_EMA}={details['ema_fast']:.2f}  "
+                f"EMA{config.SLOW_EMA}={details['ema_slow']:.2f}  "
+                f"RSI={details['rsi']:.1f}  ATR={details['atr']:.2f}  "
+                f"Cross={details['crossover'].upper()}"
+            )
+            # Confluence breakdown line
+            zone_info = (f"{details['zone']['type']}  str={details['zone']['strength']}"
+                         if details['zone'] else "—")
+            fvg_info  = (f"{details['fvg']['type']}  mid={details['fvg']['gap_mid']:.2f}"
+                         if details['fvg'] else "—")
+            logger.info(
+                f"Confluence | score={details['score']}/{config.MIN_CONFLUENCE_SCORE} needed  "
+                f"| RSI={'✓' if details['rsi_ok'] else '✗'}  "
+                f"| Zone={'✓ ' + zone_info if details['at_zone'] else '✗'}  "
+                f"| FVG={'✓ ' + fvg_info if details['near_fvg'] else '✗'}  "
+                f"| PA={'✓ ' + details['candle_pattern'] if details['pa_confirmed'] else '✗'}  "
+                f"→ Signal={'BUY' if signal==1 else 'SELL' if signal==-1 else 'NONE'}"
             )
 
             if signal == 0:
