@@ -11,10 +11,21 @@ Docs: https://metaapi.cloud/docs/client/python/
 """
 
 import logging
+import os
+import ssl
 from datetime import datetime, timezone
 
+import certifi
 import pandas as pd
 from metaapi_cloud_sdk import MetaApi
+
+# Fix macOS SSL certificate verification issue (Python from python.org ships
+# without system certificates; certifi provides a bundled CA bundle).
+os.environ.setdefault("SSL_CERT_FILE", certifi.where())
+os.environ.setdefault("REQUESTS_CA_BUNDLE", certifi.where())
+ssl._create_default_https_context = lambda: ssl.create_default_context(
+    cafile=certifi.where()
+)
 
 logger = logging.getLogger(__name__)
 
