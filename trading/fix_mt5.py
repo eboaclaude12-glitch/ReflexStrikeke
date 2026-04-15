@@ -37,7 +37,7 @@ async def connect(token, account_id):
         await account.deploy()
     logger.info("Waiting for broker connection...")
     await account.wait_connected()
-    connection = account.get_rpc_connection()
+    connection = account.get_streaming_connection()
     await connection.connect()
     logger.info("Waiting for data sync...")
     await connection.wait_synchronized()
